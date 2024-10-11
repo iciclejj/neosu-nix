@@ -1,0 +1,39 @@
+diff --git a/src/App/Osu/Beatmap.cpp b/src/App/Osu/Beatmap.cpp
+index fb9d60f..8c6ead0 100644
+--- a/src/App/Osu/Beatmap.cpp
++++ b/src/App/Osu/Beatmap.cpp
+@@ -2286,7 +2286,7 @@ void Beatmap::update2() {
+                     quick_restarting &=
+                         m_hitobjects.size() > 0 && m_hitobjects[0]->click_time > cv_quick_retry_time.getInt();
+                     if(quick_restarting) {
+-                        m_music->setPositionMS(max(0LL, m_hitobjects[0]->click_time - cv_quick_retry_time.getInt()));
++                        m_music->setPositionMS(max((i64)0, m_hitobjects[0]->click_time - cv_quick_retry_time.getInt()));
+                     }
+                     m_bWasSeekFrame = true;
+ 
+diff --git a/src/App/Osu/Downloader.cpp b/src/App/Osu/Downloader.cpp
+index 8fe23e3..4150a49 100644
+--- a/src/App/Osu/Downloader.cpp
++++ b/src/App/Osu/Downloader.cpp
+@@ -30,7 +30,7 @@ struct DownloadThread {
+ };
+ 
+ std::mutex threads_mtx;
+-std::vector<DownloadThread*> threads;
++static std::vector<DownloadThread*> threads;
+ 
+ void abort_downloads() {
+     std::lock_guard<std::mutex> lock(threads_mtx);
+diff --git a/src/App/Osu/SongBrowser/LoudnessCalcThread.cpp b/src/App/Osu/SongBrowser/LoudnessCalcThread.cpp
+index b6c85dd..486bbd0 100644
+--- a/src/App/Osu/SongBrowser/LoudnessCalcThread.cpp
++++ b/src/App/Osu/SongBrowser/LoudnessCalcThread.cpp
+@@ -96,7 +96,7 @@ struct LoudnessCalcThread {
+     }
+ };
+ 
+-std::vector<LoudnessCalcThread*> threads;
++static std::vector<LoudnessCalcThread*> threads;
+ 
+ u32 loct_computed() {
+     u32 x = 0;
