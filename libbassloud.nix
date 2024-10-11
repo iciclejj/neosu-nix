@@ -3,7 +3,7 @@
 }:
 stdenv.mkDerivation {
   name = "libbassloud";
-  src = /home/icicle/tmp/neosu;
+  src = ./.;
 
   nativeBuildInputs = [
     autoPatchelfHook

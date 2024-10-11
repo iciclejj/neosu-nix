@@ -10,10 +10,9 @@ clang-tools,
   libbass_fx,
   libbassmix,
   libbassloud,
-  util-linux, #blkid
+  util-linux,
   discord-rpc,
   freetype,
-#ftgl,
   glew,
   libGL,
   glxinfo,
@@ -27,23 +26,22 @@ clang-tools,
 
 stdenv.mkDerivation {
   pname = "neosu";
-  version = "master";
+  version = "5323268cab";
 
   src = fetchTarball {
-    url = "https://git.kiwec.net/kiwec/McOsu/archive/master.tar.gz";
+    url = "https://git.kiwec.net/kiwec/McOsu/archive/5323268cab7c665223249823eab59fea08a443d0.tar.gz";
     sha256 = "0ar38kaqyfky3wdvjq8rcr2awl9my747knf97wbij4bsh1rd31c2";
   };
 
   patches = [ ./neosu.patch ./neosu-no-sanitize.patch ];
 
-  #nativeBuildInputs = [ clang-tools ];
   NIX_LDFLAGS = [
     "-lpthread"
     "-lGL"
     "-lcurl"
-    # " -V"
   ];
 
+  allowUnfree = true;
 
   buildInputs = [
     curlFull xorg.libX11 libbass libbass_fx libbassmix libbassloud discord-rpc
@@ -53,7 +51,6 @@ stdenv.mkDerivation {
   installPhase = ''
     cp -r build $out
   '';
-
 
   enableParallelBuilding = true;
 }
