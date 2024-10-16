@@ -1,8 +1,6 @@
 {
-clang-tools,
   stdenv,
-  fetchzip,
-  autoPatchelfHook,
+# autoPatchelfHook,
   curlFull,
   pkgconf,
 
@@ -15,7 +13,6 @@ clang-tools,
   freetype,
   glew,
   libGL,
-  glxinfo,
   enet,
   libjpeg,
   xz,
@@ -33,7 +30,7 @@ stdenv.mkDerivation {
     sha256 = "0ar38kaqyfky3wdvjq8rcr2awl9my747knf97wbij4bsh1rd31c2";
   };
 
-  patches = [ ./neosu.patch ./neosu-no-sanitize.patch ];
+  patches = [ ./neosu.patch ./neosu-makefile.patch ];
 
   NIX_LDFLAGS = [
     "-lpthread"
@@ -41,15 +38,26 @@ stdenv.mkDerivation {
     "-lcurl"
   ];
 
-  allowUnfree = true;
+  nativeBuildInputs = [
+      libbass
+      libbass_fx
+      libbassmix
+      libbassloud
+  ];
 
   buildInputs = [
     curlFull xorg.libX11 libbass libbass_fx libbassmix libbassloud discord-rpc
     libjpeg xz libXi zlib util-linux glew pkgconf xorg.libXdmcp enet freetype libGL
   ];
 
+  configurePhase = ''
+    mkdir -p $out
+  '';
+
   installPhase = ''
-    cp -r build $out
+    runHook preInstall
+    mv ./build/* $out
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;
